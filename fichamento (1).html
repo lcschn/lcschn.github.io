@@ -1,0 +1,1336 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Fichário</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,400;8..60,500;8..60,600;8..60,700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://accounts.google.com/gsi/client" async defer></script>
+<style>
+  :root {
+    --paper: #F6F3EC;
+    --paper-raised: #FDFBF6;
+    --ink: #232019;
+    --ink-soft: #5B5548;
+    --ink-faint: #948C7A;
+    --rule: #DCD5C4;
+    --rule-strong: #C7BEA8;
+    --wine: #7A3B34;
+    --wine-deep: #5C2C27;
+    --wine-tint: #F1E3E0;
+    --sage: #5C6E52;
+    --sage-tint: #E7ECE1;
+    --shadow: rgba(35, 32, 25, 0.08);
+    --focus: #7A3B34;
+  }
+
+  [data-theme="dark"] {
+    --paper: #1C1A16;
+    --paper-raised: #262319;
+    --ink: #EDE7D9;
+    --ink-soft: #B8AF9B;
+    --ink-faint: #7C7461;
+    --rule: #3A3529;
+    --rule-strong: #4C4633;
+    --wine: #C97A70;
+    --wine-deep: #E39187;
+    --wine-tint: #35241F;
+    --sage: #9FB08F;
+    --sage-tint: #26301F;
+    --shadow: rgba(0, 0, 0, 0.35);
+    --focus: #C97A70;
+  }
+
+  * { box-sizing: border-box; }
+
+  html, body {
+    margin: 0;
+    padding: 0;
+    background: var(--paper);
+    color: var(--ink);
+    font-family: 'Inter', -apple-system, sans-serif;
+    transition: background 0.25s ease, color 0.25s ease;
+  }
+
+  ::selection { background: var(--wine-tint); color: var(--wine-deep); }
+
+  .app {
+    max-width: 1180px;
+    margin: 0 auto;
+    padding: 28px 24px 80px;
+  }
+
+  /* ---------- Header ---------- */
+  header.top {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 24px;
+    padding-bottom: 22px;
+    border-bottom: 1px solid var(--rule);
+    margin-bottom: 26px;
+  }
+
+  .brand {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+
+  .brand .mark {
+    font-family: 'Source Serif 4', serif;
+    font-size: 30px;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+  }
+
+  .brand .mark span { color: var(--wine); }
+
+  .brand .sub {
+    font-size: 13px;
+    color: var(--ink-faint);
+  }
+
+  .top-actions {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-top: 4px;
+  }
+
+  .theme-toggle {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: var(--paper-raised);
+    border: 1px solid var(--rule-strong);
+    border-radius: 20px;
+    padding: 6px 6px;
+  }
+
+  .theme-toggle button {
+    border: none;
+    background: transparent;
+    width: 30px;
+    height: 30px;
+    border-radius: 16px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--ink-faint);
+    transition: background 0.2s, color 0.2s;
+  }
+
+  .theme-toggle button.active {
+    background: var(--wine);
+    color: var(--paper-raised);
+  }
+
+  .theme-toggle svg { width: 16px; height: 16px; }
+
+  .sync-status {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 12.5px;
+    color: var(--ink-faint);
+    padding: 0 4px;
+  }
+  .sync-status .dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: var(--ink-faint);
+    flex-shrink: 0;
+  }
+  .sync-status.synced .dot { background: var(--sage); }
+  .sync-status.syncing .dot { background: #C9A227; animation: pulse 1s infinite; }
+  .sync-status.error .dot { background: #B0463C; }
+  .sync-status.error { cursor: help; }
+  @keyframes pulse { 0%,100% { opacity: 1; } 50% { opacity: 0.35; } }
+
+  .btn-login {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: var(--paper-raised);
+    border: 1px solid var(--rule-strong);
+    border-radius: 8px;
+    padding: 9px 14px;
+    font-family: 'Inter', sans-serif;
+    font-size: 13.5px;
+    font-weight: 600;
+    color: var(--ink);
+    cursor: pointer;
+  }
+  .btn-login:hover { border-color: var(--focus); }
+  .btn-login img { width: 16px; height: 16px; border-radius: 50%; }
+
+  .account-chip {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: var(--paper-raised);
+    border: 1px solid var(--rule-strong);
+    border-radius: 20px;
+    padding: 5px 12px 5px 5px;
+    font-size: 13px;
+    color: var(--ink-soft);
+    cursor: pointer;
+  }
+  .account-chip img { width: 24px; height: 24px; border-radius: 50%; }
+  .account-chip:hover { border-color: var(--focus); }
+
+  .gate {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 90px 20px;
+    gap: 16px;
+  }
+  .gate .mark {
+    font-family: 'Source Serif 4', serif;
+    font-size: 34px;
+    font-weight: 600;
+  }
+  .gate .mark span { color: var(--wine); }
+  .gate p { color: var(--ink-faint); font-size: 14.5px; max-width: 380px; line-height: 1.55; margin: 0; }
+
+  .btn-new {
+    font-family: 'Inter', sans-serif;
+    font-weight: 600;
+    font-size: 14.5px;
+    background: var(--wine);
+    color: var(--paper-raised);
+    border: none;
+    border-radius: 8px;
+    padding: 11px 18px;
+    cursor: pointer;
+    transition: background 0.15s, transform 0.1s;
+  }
+  .btn-new:hover { background: var(--wine-deep); }
+  .btn-new:active { transform: translateY(1px); }
+
+  /* ---------- Search & filters ---------- */
+  .search-row {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 22px;
+    flex-wrap: wrap;
+  }
+
+  .search-box {
+    flex: 1 1 320px;
+    position: relative;
+  }
+
+  .search-box svg {
+    position: absolute;
+    left: 14px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 16px;
+    height: 16px;
+    color: var(--ink-faint);
+  }
+
+  .search-box input {
+    width: 100%;
+    padding: 12px 14px 12px 40px;
+    border-radius: 8px;
+    border: 1px solid var(--rule-strong);
+    background: var(--paper-raised);
+    color: var(--ink);
+    font-family: 'Inter', sans-serif;
+    font-size: 14.5px;
+    outline: none;
+  }
+  .search-box input:focus { border-color: var(--focus); box-shadow: 0 0 0 3px var(--wine-tint); }
+  .search-box input::placeholder { color: var(--ink-faint); }
+
+  select.filter {
+    padding: 12px 14px;
+    border-radius: 8px;
+    border: 1px solid var(--rule-strong);
+    background: var(--paper-raised);
+    color: var(--ink);
+    font-family: 'Inter', sans-serif;
+    font-size: 14px;
+    cursor: pointer;
+    outline: none;
+  }
+  select.filter:focus { border-color: var(--focus); }
+
+  .count-line {
+    font-size: 13px;
+    color: var(--ink-faint);
+    margin-bottom: 16px;
+  }
+
+  /* ---------- Card grid ---------- */
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 16px;
+  }
+
+  .card {
+    background: var(--paper-raised);
+    border: 1px solid var(--rule);
+    border-radius: 10px;
+    padding: 18px 18px 16px;
+    cursor: pointer;
+    transition: border-color 0.15s, box-shadow 0.15s, transform 0.1s;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    position: relative;
+  }
+  .card:hover {
+    border-color: var(--rule-strong);
+    box-shadow: 0 4px 14px var(--shadow);
+    transform: translateY(-1px);
+  }
+
+  .card .tag-row {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+  }
+
+  .pill {
+    font-size: 11px;
+    font-weight: 600;
+    padding: 3px 9px;
+    border-radius: 20px;
+    background: var(--sage-tint);
+    color: var(--sage);
+    white-space: nowrap;
+  }
+  .pill.secondary { background: var(--wine-tint); color: var(--wine); }
+
+  .card .autor {
+    font-family: 'Source Serif 4', serif;
+    font-weight: 600;
+    font-size: 16.5px;
+    color: var(--ink);
+    line-height: 1.3;
+  }
+
+  .card .titulo {
+    font-size: 13px;
+    color: var(--ink-soft);
+    font-style: italic;
+    line-height: 1.4;
+  }
+
+  .card .trecho {
+    font-size: 13.5px;
+    color: var(--ink-soft);
+    line-height: 1.5;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  .card .meta-foot {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 12px;
+    color: var(--ink-faint);
+    padding-top: 8px;
+    border-top: 1px solid var(--rule);
+    margin-top: auto;
+  }
+
+  .empty-state {
+    text-align: center;
+    padding: 70px 20px;
+    color: var(--ink-faint);
+  }
+  .empty-state .icon { margin-bottom: 14px; opacity: 0.5; }
+  .empty-state h3 {
+    font-family: 'Source Serif 4', serif;
+    color: var(--ink-soft);
+    font-weight: 600;
+    font-size: 20px;
+    margin: 0 0 6px;
+  }
+
+  /* ---------- Modal / Form ---------- */
+  .overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(20, 18, 14, 0.5);
+    backdrop-filter: blur(2px);
+    display: none;
+    align-items: flex-start;
+    justify-content: center;
+    padding: 40px 20px;
+    overflow-y: auto;
+    z-index: 100;
+  }
+  .overlay.show { display: flex; }
+
+  .panel {
+    background: var(--paper);
+    border-radius: 14px;
+    width: 100%;
+    max-width: 760px;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+    animation: rise 0.22s ease;
+  }
+  @keyframes rise {
+    from { opacity: 0; transform: translateY(14px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .panel-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 26px;
+    border-bottom: 1px solid var(--rule);
+  }
+  .panel-head h2 {
+    font-family: 'Source Serif 4', serif;
+    font-size: 21px;
+    font-weight: 600;
+    margin: 0;
+  }
+  .close-btn {
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    color: var(--ink-faint);
+    width: 32px;
+    height: 32px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .close-btn:hover { background: var(--rule); color: var(--ink); }
+
+  .panel-body {
+    padding: 22px 26px 8px;
+  }
+
+  .section-label {
+    font-size: 11.5px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--wine);
+    margin: 22px 0 12px;
+  }
+  .section-label:first-child { margin-top: 0; }
+
+  .field { margin-bottom: 16px; }
+  .field label {
+    display: block;
+    font-size: 13.5px;
+    font-weight: 600;
+    color: var(--ink-soft);
+    margin-bottom: 6px;
+  }
+  .field .hint {
+    font-size: 12px;
+    color: var(--ink-faint);
+    font-weight: 400;
+    margin-left: 6px;
+  }
+
+  .field input[type="text"],
+  .field input[type="date"],
+  .field textarea,
+  .field select {
+    width: 100%;
+    padding: 11px 13px;
+    border-radius: 8px;
+    border: 1px solid var(--rule-strong);
+    background: var(--paper-raised);
+    color: var(--ink);
+    font-family: 'Inter', sans-serif;
+    font-size: 14.5px;
+    outline: none;
+    resize: vertical;
+  }
+  .field textarea { font-family: 'Source Serif 4', serif; line-height: 1.55; font-size: 15px; }
+  .field input:focus, .field textarea:focus, .field select:focus {
+    border-color: var(--focus);
+    box-shadow: 0 0 0 3px var(--wine-tint);
+  }
+
+  .row-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+  .row-3 { display: grid; grid-template-columns: 1.4fr 0.8fr 1fr; gap: 14px; }
+
+  .content-type-toggle {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 10px;
+  }
+  .content-type-toggle button {
+    flex: 1;
+    padding: 9px;
+    border-radius: 7px;
+    border: 1px solid var(--rule-strong);
+    background: var(--paper-raised);
+    color: var(--ink-soft);
+    font-size: 13.5px;
+    font-weight: 600;
+    cursor: pointer;
+  }
+  .content-type-toggle button.active {
+    background: var(--wine);
+    border-color: var(--wine);
+    color: var(--paper-raised);
+  }
+
+  .complementares-toggle {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+    color: var(--ink-soft);
+    font-size: 13.5px;
+    font-weight: 600;
+    margin: 22px 0 14px;
+    user-select: none;
+  }
+  .complementares-toggle svg { transition: transform 0.2s; width: 14px; height: 14px; }
+  .complementares-toggle.open svg { transform: rotate(90deg); }
+
+  .complementares-body {
+    display: none;
+  }
+  .complementares-body.open { display: block; }
+
+  .panel-foot {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 18px 26px 24px;
+    gap: 10px;
+  }
+
+  .btn-primary, .btn-ghost, .btn-danger {
+    font-family: 'Inter', sans-serif;
+    font-weight: 600;
+    font-size: 14.5px;
+    border-radius: 8px;
+    padding: 11px 18px;
+    cursor: pointer;
+    border: none;
+  }
+  .btn-primary { background: var(--wine); color: var(--paper-raised); }
+  .btn-primary:hover { background: var(--wine-deep); }
+  .btn-ghost { background: transparent; color: var(--ink-soft); border: 1px solid var(--rule-strong); }
+  .btn-ghost:hover { background: var(--rule); }
+  .btn-danger { background: transparent; color: #B0463C; border: 1px solid #B0463C33; }
+  .btn-danger:hover { background: #B0463C15; }
+
+  /* ---------- View ficha ---------- */
+  .view-panel .panel-body { padding: 24px 30px 10px; }
+  .view-ref {
+    font-family: 'Source Serif 4', serif;
+    font-size: 15.5px;
+    color: var(--ink-soft);
+    line-height: 1.5;
+    padding-bottom: 16px;
+    border-bottom: 1px solid var(--rule);
+    margin-bottom: 18px;
+  }
+  .view-loc {
+    font-size: 12.5px;
+    color: var(--ink-faint);
+    margin-top: 6px;
+  }
+  .view-block { margin-bottom: 20px; }
+  .view-block h4 {
+    font-size: 11.5px;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--wine);
+    margin: 0 0 8px;
+    font-weight: 700;
+  }
+  .view-block .conteudo {
+    font-family: 'Source Serif 4', serif;
+    font-size: 16px;
+    line-height: 1.65;
+    color: var(--ink);
+    white-space: pre-wrap;
+  }
+  .view-block .conteudo.citacao {
+    border-left: 3px solid var(--wine);
+    padding-left: 16px;
+    font-style: italic;
+  }
+  .view-block .texto {
+    font-size: 14.5px;
+    line-height: 1.6;
+    color: var(--ink-soft);
+    white-space: pre-wrap;
+  }
+  .view-keywords { display: flex; gap: 6px; flex-wrap: wrap; }
+
+  @media (max-width: 640px) {
+    .row-2, .row-3 { grid-template-columns: 1fr; }
+    header.top { flex-direction: column; }
+    .top-actions { width: 100%; justify-content: space-between; }
+  }
+</style>
+</head>
+<body>
+<div class="app">
+
+  <header class="top">
+    <div class="brand">
+      <div class="mark">Fichár<span>io</span></div>
+      <div class="sub">seu arquivo de leituras</div>
+    </div>
+    <div class="top-actions">
+      <div class="sync-status" id="syncStatus" style="display:none;">
+        <span class="dot"></span>
+        <span id="syncStatusText">Sincronizado</span>
+      </div>
+      <div class="theme-toggle" id="themeToggle">
+        <button id="btnLight" title="Modo claro" class="active">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>
+        </button>
+        <button id="btnDark" title="Modo escuro">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.8A9 9 0 1111.2 3a7 7 0 009.8 9.8z"/></svg>
+        </button>
+      </div>
+      <div id="authArea"></div>
+      <button class="btn-new" id="btnNovo" style="display:none;">+ Novo fichamento</button>
+    </div>
+  </header>
+
+  <div id="gateScreen" class="gate">
+    <div class="mark">Fichár<span>io</span></div>
+    <p>Entre com sua conta Google para sincronizar seus fichamentos com o Google Drive e acessá-los de qualquer dispositivo.</p>
+  </div>
+
+  <div id="mainScreen" style="display:none;">
+
+  <div class="search-row">
+    <div class="search-box">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>
+      <input type="text" id="searchInput" placeholder="Buscar por autor, título, palavra-chave ou trecho...">
+    </div>
+    <select class="filter" id="filterCategoria">
+      <option value="">Todas as categorias</option>
+    </select>
+    <select class="filter" id="filterOrdenar">
+      <option value="recente">Mais recentes</option>
+      <option value="antigo">Mais antigos</option>
+      <option value="autor">Autor (A-Z)</option>
+    </select>
+  </div>
+
+  <div class="count-line" id="countLine"></div>
+
+  <div class="grid" id="grid"></div>
+
+  </div>
+
+</div>
+
+<!-- Modal: novo/editar fichamento -->
+<div class="overlay" id="overlayForm">
+  <div class="panel">
+    <div class="panel-head">
+      <h2 id="formTitle">Novo fichamento</h2>
+      <button class="close-btn" id="closeForm">
+        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6 6 18M6 6l12 12"/></svg>
+      </button>
+    </div>
+    <div class="panel-body">
+
+      <div class="section-label">Núcleo do fichamento</div>
+
+      <div class="field">
+        <label>Referência bibliográfica completa</label>
+        <textarea id="fReferencia" rows="2" placeholder="SOBRENOME, Nome. Título da obra. Cidade: Editora, Ano."></textarea>
+      </div>
+
+      <div class="row-2">
+        <div class="field">
+          <label>Autor(es)<span class="hint">para busca rápida</span></label>
+          <input type="text" id="fAutor" placeholder="Ex.: Foucault, M.">
+        </div>
+        <div class="field">
+          <label>Página(s)</label>
+          <input type="text" id="fPagina" placeholder="Ex.: p. 42 ou pp. 42-45">
+        </div>
+      </div>
+
+      <div class="field">
+        <label>Título curto do texto<span class="hint">para identificar nos cartões</span></label>
+        <input type="text" id="fTitulo" placeholder="Ex.: Vigiar e Punir">
+      </div>
+
+      <div class="field">
+        <label>Conteúdo</label>
+        <div class="content-type-toggle">
+          <button type="button" id="btnCitacao" class="active">Citação direta</button>
+          <button type="button" id="btnParafrase">Paráfrase</button>
+        </div>
+        <textarea id="fConteudo" rows="5" placeholder='Transcreva a citação literalmente entre aspas, ou reescreva a ideia com suas palavras.'></textarea>
+      </div>
+
+      <div class="field">
+        <label>Comentário próprio</label>
+        <textarea id="fComentario" rows="4" placeholder="Sua concordância, dúvida, crítica ou observação sobre o trecho."></textarea>
+      </div>
+
+      <div class="complementares-toggle" id="toggleComplementares">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="m9 6 6 6-6 6"/></svg>
+        Campos complementares (opcionais)
+      </div>
+
+      <div class="complementares-body" id="complementaresBody">
+
+        <div class="row-2">
+          <div class="field">
+            <label>Localização interna<span class="hint">capítulo/seção</span></label>
+            <input type="text" id="fLocalizacao" placeholder="Ex.: Cap. 3, seção 2">
+          </div>
+          <div class="field">
+            <label>Tipo de fonte</label>
+            <select id="fTipoFonte">
+              <option value="">—</option>
+              <option value="primaria">Fonte primária</option>
+              <option value="secundaria">Fonte secundária</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="field">
+          <label>Resumo do argumento central</label>
+          <textarea id="fResumo" rows="3" placeholder="Ideia geral do trecho, além da citação pontual."></textarea>
+        </div>
+
+        <div class="field">
+          <label>Palavras-chave / conceitos<span class="hint">separadas por vírgula</span></label>
+          <input type="text" id="fPalavrasChave" placeholder="Ex.: biopoder, disciplina, panóptico">
+        </div>
+
+        <div class="field">
+          <label>Relação com outros autores/textos</label>
+          <textarea id="fRelacao" rows="2" placeholder="Conexões com outras leituras do seu referencial."></textarea>
+        </div>
+
+        <div class="field">
+          <label>Relevância para sua pesquisa</label>
+          <textarea id="fRelevancia" rows="2" placeholder="Onde esse trecho pode ser aproveitado no seu trabalho."></textarea>
+        </div>
+
+        <div class="row-2">
+          <div class="field">
+            <label>Categoria temática</label>
+            <input type="text" id="fCategoria" placeholder="Ex.: Metodologia, Cap. 2 da dissertação">
+          </div>
+          <div class="field">
+            <label>Data do fichamento</label>
+            <input type="date" id="fData">
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+    <div class="panel-foot">
+      <button class="btn-danger" id="btnExcluir" style="display:none;">Excluir fichamento</button>
+      <div style="flex:1;"></div>
+      <button class="btn-ghost" id="btnCancelar">Cancelar</button>
+      <button class="btn-primary" id="btnSalvar">Salvar fichamento</button>
+    </div>
+  </div>
+</div>
+
+<!-- Modal: visualizar ficha -->
+<div class="overlay" id="overlayView">
+  <div class="panel view-panel">
+    <div class="panel-head">
+      <h2 id="viewAutorTitulo">Ficha</h2>
+      <button class="close-btn" id="closeView">
+        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6 6 18M6 6l12 12"/></svg>
+      </button>
+    </div>
+    <div class="panel-body" id="viewBody"></div>
+    <div class="panel-foot">
+      <div style="flex:1;"></div>
+      <button class="btn-ghost" id="btnEditar">Editar</button>
+      <button class="btn-primary" id="btnFecharView">Fechar</button>
+    </div>
+  </div>
+</div>
+
+<!-- Modal: confirmar exclusão -->
+<div class="overlay" id="overlayConfirm">
+  <div class="panel" style="max-width: 420px;">
+    <div class="panel-head">
+      <h2>Excluir fichamento?</h2>
+    </div>
+    <div class="panel-body" style="padding-bottom: 4px;">
+      <p style="color: var(--ink-soft); font-size: 14.5px; line-height: 1.5; margin: 0;">
+        Esta ação não pode ser desfeita. O fichamento será removido permanentemente.
+      </p>
+    </div>
+    <div class="panel-foot">
+      <div style="flex:1;"></div>
+      <button class="btn-ghost" id="btnCancelarExclusao">Cancelar</button>
+      <button class="btn-danger" id="btnConfirmarExclusao" style="border:1px solid #B0463C; background:#B0463C; color:#fff;">Sim, excluir</button>
+    </div>
+  </div>
+</div>
+
+<script>
+(function() {
+  // ======================================================================
+  // CONFIGURAÇÃO — preencha com suas credenciais do Google Cloud Console
+  // ======================================================================
+  const GOOGLE_CLIENT_ID = 'SEU_CLIENT_ID_AQUI.apps.googleusercontent.com';
+  const DRIVE_FILE_NAME = 'fichamentos.json';
+  const DRIVE_SCOPE = 'https://www.googleapis.com/auth/drive.appdata';
+  // ======================================================================
+
+  const THEME_KEY = 'fichamentos_theme';
+  let fichas = [];
+  let editingId = null;
+  let viewingId = null;
+  let tipoConteudo = 'citacao';
+
+  let accessToken = null;
+  let driveFileId = null;
+  let tokenClient = null;
+  let userProfile = null;
+  let saveTimer = null;
+
+  // ---------- Status de sincronização ----------
+  const syncStatusEl = document.getElementById('syncStatus');
+  const syncStatusText = document.getElementById('syncStatusText');
+  function setSyncStatus(state, text) {
+    syncStatusEl.style.display = 'flex';
+    syncStatusEl.className = 'sync-status ' + state;
+    syncStatusText.textContent = text;
+  }
+
+  // ---------- Autenticação (Google Identity Services) ----------
+  function initGoogleAuth() {
+    tokenClient = google.accounts.oauth2.initTokenClient({
+      client_id: GOOGLE_CLIENT_ID,
+      scope: DRIVE_SCOPE,
+      callback: async (resp) => {
+        if (resp.error) {
+          console.error('Erro de autenticação:', resp);
+          setSyncStatus('error', 'Falha no login');
+          return;
+        }
+        accessToken = resp.access_token;
+        sessionStorage.setItem('gtoken', accessToken);
+        await onLoginSuccess();
+      },
+    });
+
+    document.getElementById('authArea').innerHTML =
+      `<button class="btn-login" id="btnGoogleLogin">
+        <svg width="16" height="16" viewBox="0 0 48 48"><path fill="#FFC107" d="M43.6 20.5H42V20H24v8h11.3C33.7 32.4 29.3 35 24 35c-6.1 0-11.2-4.1-13-9.6l-6.6 5.1C7.7 37.9 15.2 43 24 43c11 0 20-9 20-20 0-1.3-.1-2.6-.4-3.5z"/><path fill="#FF3D00" d="m6.3 14.7 6.6 4.8C14.6 15.6 18.9 13 24 13c3.1 0 5.9 1.1 8.1 3l6-6C34.6 6.5 29.6 4.5 24 4.5 15.5 4.5 8.1 9.3 4.4 16.3z"/><path fill="#4CAF50" d="M24 43c5.2 0 10-2 13.6-5.2l-6.3-5.2C29.3 34.4 26.8 35 24 35c-5.3 0-9.6-2.6-11.3-7l-6.6 5.1C9.9 39.5 16.4 43 24 43z"/><path fill="#1976D2" d="M43.6 20.5H42V20H24v8h11.3c-.8 2.3-2.4 4.3-4.4 5.6l6.3 5.2C40.6 35.3 44 30 44 24c0-1.3-.1-2.6-.4-3.5z"/></svg>
+        Entrar com Google
+      </button>`;
+    document.getElementById('btnGoogleLogin').addEventListener('click', () => {
+      tokenClient.requestAccessToken({ prompt: 'consent' });
+    });
+  }
+
+  async function onLoginSuccess() {
+    setSyncStatus('syncing', 'Conectando...');
+    try {
+      const profile = await fetchUserProfile();
+      userProfile = profile;
+      renderAccountChip(profile);
+      await ensureDriveFile();
+      await loadFichasFromDrive();
+      document.getElementById('gateScreen').style.display = 'none';
+      document.getElementById('mainScreen').style.display = 'block';
+      document.getElementById('btnNovo').style.display = 'inline-block';
+      updateCategoriaFilterOptions();
+      renderGrid();
+      setSyncStatus('synced', 'Sincronizado');
+    } catch (e) {
+      console.error('[Fichário] Falha ao conectar:', e);
+      setSyncStatus('error', 'Erro ao conectar — veja o console (F12)');
+    }
+  }
+
+  async function fetchUserProfile() {
+    const r = await fetch('https://www.googleapis.com/oauth2/v3/userinfo', {
+      headers: { Authorization: 'Bearer ' + accessToken }
+    });
+    if (!r.ok) {
+      const errBody = await r.text();
+      throw new Error(`Falha ao obter perfil (HTTP ${r.status}): ${errBody}`);
+    }
+    return r.json();
+  }
+
+  function renderAccountChip(profile) {
+    document.getElementById('authArea').innerHTML =
+      `<div class="account-chip" id="btnLogout" title="Clique para sair">
+        <img src="${profile.picture}" alt="">
+        <span>${profile.given_name || profile.name || 'Conta'}</span>
+      </div>`;
+    document.getElementById('btnLogout').addEventListener('click', logout);
+  }
+
+  function logout() {
+    if (accessToken) {
+      google.accounts.oauth2.revoke(accessToken, () => {});
+    }
+    accessToken = null;
+    driveFileId = null;
+    userProfile = null;
+    sessionStorage.removeItem('gtoken');
+    fichas = [];
+    document.getElementById('gateScreen').style.display = 'flex';
+    document.getElementById('mainScreen').style.display = 'none';
+    document.getElementById('btnNovo').style.display = 'none';
+    syncStatusEl.style.display = 'none';
+    initGoogleAuth();
+  }
+
+  // ---------- Google Drive (appDataFolder) ----------
+  async function driveFetch(url, options = {}) {
+    const res = await fetch(url, {
+      ...options,
+      headers: {
+        ...(options.headers || {}),
+        Authorization: 'Bearer ' + accessToken,
+      },
+    });
+    if (!res.ok) {
+      let detail = '';
+      try { detail = await res.clone().text(); } catch (e) {}
+      console.error(`[Fichário] Requisição ao Drive falhou (HTTP ${res.status}) em ${url}\n`, detail);
+      if (res.status === 401) throw new Error('token_expirado');
+      throw new Error(`Drive API retornou HTTP ${res.status}: ${detail}`);
+    }
+    return res;
+  }
+
+  async function ensureDriveFile() {
+    // Procura o arquivo na pasta appDataFolder
+    const q = encodeURIComponent(`name='${DRIVE_FILE_NAME}' and trashed=false`);
+    const searchUrl = `https://www.googleapis.com/drive/v3/files?spaces=appDataFolder&q=${q}&fields=files(id,name)`;
+    const searchRes = await driveFetch(searchUrl);
+    const searchData = await searchRes.json();
+
+    if (searchData.files && searchData.files.length > 0) {
+      driveFileId = searchData.files[0].id;
+      return;
+    }
+
+    // Não existe — cria um novo arquivo vazio
+    const metadata = { name: DRIVE_FILE_NAME, parents: ['appDataFolder'] };
+    const boundary = '-------fichario-boundary';
+    const body =
+      `--${boundary}\r\nContent-Type: application/json; charset=UTF-8\r\n\r\n${JSON.stringify(metadata)}\r\n` +
+      `--${boundary}\r\nContent-Type: application/json\r\n\r\n[]\r\n--${boundary}--`;
+
+    const createRes = await driveFetch(
+      'https://www.googleapis.com/upload/drive/v3/files?uploadType=multipart&fields=id',
+      {
+        method: 'POST',
+        headers: { 'Content-Type': `multipart/related; boundary=${boundary}` },
+        body,
+      }
+    );
+    const createData = await createRes.json();
+    driveFileId = createData.id;
+  }
+
+  async function loadFichasFromDrive() {
+    const res = await driveFetch(`https://www.googleapis.com/drive/v3/files/${driveFileId}?alt=media`);
+    const text = await res.text();
+    try {
+      fichas = text.trim() ? JSON.parse(text) : [];
+    } catch (e) {
+      fichas = [];
+    }
+  }
+
+  async function saveFichasToDrive() {
+    setSyncStatus('syncing', 'Salvando...');
+    try {
+      const res = await driveFetch(
+        `https://www.googleapis.com/upload/drive/v3/files/${driveFileId}?uploadType=media`,
+        {
+          method: 'PATCH',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(fichas),
+        }
+      );
+      if (!res.ok) throw new Error('Falha ao salvar');
+      setSyncStatus('synced', 'Sincronizado');
+    } catch (e) {
+      console.error(e);
+      setSyncStatus('error', 'Não foi possível salvar — verifique a conexão');
+    }
+  }
+
+  // Salva com pequeno debounce para não disparar requisições demais
+  function saveFichas() {
+    setSyncStatus('syncing', 'Salvando...');
+    clearTimeout(saveTimer);
+    saveTimer = setTimeout(saveFichasToDrive, 400);
+  }
+
+  // ---------- Tema ----------
+  function applyTheme(theme) {
+    document.documentElement.setAttribute('data-theme', theme);
+    document.getElementById('btnLight').classList.toggle('active', theme === 'light');
+    document.getElementById('btnDark').classList.toggle('active', theme === 'dark');
+    localStorage.setItem(THEME_KEY, theme);
+  }
+  document.getElementById('btnLight').addEventListener('click', () => applyTheme('light'));
+  document.getElementById('btnDark').addEventListener('click', () => applyTheme('dark'));
+
+  const savedTheme = localStorage.getItem(THEME_KEY) ||
+    (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+  applyTheme(savedTheme);
+
+  // ---------- Elementos ----------
+  const grid = document.getElementById('grid');
+  const countLine = document.getElementById('countLine');
+  const searchInput = document.getElementById('searchInput');
+  const filterCategoria = document.getElementById('filterCategoria');
+  const filterOrdenar = document.getElementById('filterOrdenar');
+
+  const overlayForm = document.getElementById('overlayForm');
+  const overlayView = document.getElementById('overlayView');
+
+  // ---------- Render lista ----------
+  function escapeHtml(str) {
+    if (!str) return '';
+    return str.replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+  }
+
+  function updateCategoriaFilterOptions() {
+    const cats = [...new Set(fichas.map(f => f.categoria).filter(Boolean))].sort();
+    const current = filterCategoria.value;
+    filterCategoria.innerHTML = '<option value="">Todas as categorias</option>' +
+      cats.map(c => `<option value="${escapeHtml(c)}">${escapeHtml(c)}</option>`).join('');
+    if (cats.includes(current)) filterCategoria.value = current;
+  }
+
+  function matchesSearch(f, q) {
+    if (!q) return true;
+    q = q.toLowerCase();
+    const haystack = [f.autor, f.titulo, f.referencia, f.conteudo, f.comentario, f.palavrasChave, f.resumo, f.categoria]
+      .filter(Boolean).join(' ').toLowerCase();
+    return haystack.includes(q);
+  }
+
+  function renderGrid() {
+    let list = fichas.slice();
+    const q = searchInput.value.trim();
+    const cat = filterCategoria.value;
+    const ord = filterOrdenar.value;
+
+    list = list.filter(f => matchesSearch(f, q) && (!cat || f.categoria === cat));
+
+    if (ord === 'recente') list.sort((a,b) => b.criadoEm - a.criadoEm);
+    else if (ord === 'antigo') list.sort((a,b) => a.criadoEm - b.criadoEm);
+    else if (ord === 'autor') list.sort((a,b) => (a.autor||'').localeCompare(b.autor||'', 'pt-BR'));
+
+    countLine.textContent = fichas.length === 0
+      ? ''
+      : `${list.length} de ${fichas.length} fichamento${fichas.length !== 1 ? 's' : ''}`;
+
+    if (fichas.length === 0) {
+      grid.innerHTML = `<div class="empty-state" style="grid-column:1/-1;">
+        <div class="icon"><svg width="46" height="46" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M4 4h16v16H4z"/><path d="M8 8h8M8 12h8M8 16h5"/></svg></div>
+        <h3>Nenhum fichamento ainda</h3>
+        <p>Clique em "Novo fichamento" para começar seu arquivo de leituras.</p>
+      </div>`;
+      return;
+    }
+
+    if (list.length === 0) {
+      grid.innerHTML = `<div class="empty-state" style="grid-column:1/-1;">
+        <div class="icon"><svg width="46" height="46" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg></div>
+        <h3>Nada encontrado</h3>
+        <p>Tente outro termo de busca ou categoria.</p>
+      </div>`;
+      return;
+    }
+
+    grid.innerHTML = list.map(f => {
+      const trecho = f.conteudo ? escapeHtml(f.conteudo).slice(0, 220) : '';
+      return `
+      <div class="card" data-id="${f.id}">
+        <div class="tag-row">
+          <span class="pill">${f.tipoConteudo === 'parafrase' ? 'Paráfrase' : 'Citação'}</span>
+          ${f.categoria ? `<span class="pill secondary">${escapeHtml(f.categoria)}</span>` : ''}
+        </div>
+        <div class="autor">${escapeHtml(f.autor) || 'Autor não informado'}</div>
+        ${f.titulo ? `<div class="titulo">${escapeHtml(f.titulo)}</div>` : ''}
+        <div class="trecho">${trecho}</div>
+        <div class="meta-foot">
+          <span>${f.pagina ? 'p. ' + escapeHtml(f.pagina).replace(/^p\.?\s*/i,'') : ''}</span>
+          <span>${f.dataFichamento ? formatDate(f.dataFichamento) : ''}</span>
+        </div>
+      </div>`;
+    }).join('');
+
+    grid.querySelectorAll('.card').forEach(card => {
+      card.addEventListener('click', () => openView(card.dataset.id));
+    });
+  }
+
+  function formatDate(iso) {
+    const [y,m,d] = iso.split('-');
+    return `${d}/${m}/${y}`;
+  }
+
+  searchInput.addEventListener('input', renderGrid);
+  filterCategoria.addEventListener('change', renderGrid);
+  filterOrdenar.addEventListener('change', renderGrid);
+
+  // ---------- Form: abrir/fechar ----------
+  const formFields = ['fReferencia','fAutor','fPagina','fTitulo','fConteudo','fComentario',
+    'fLocalizacao','fTipoFonte','fResumo','fPalavrasChave','fRelacao','fRelevancia','fCategoria','fData'];
+
+  function clearForm() {
+    formFields.forEach(id => document.getElementById(id).value = '');
+    tipoConteudo = 'citacao';
+    document.getElementById('btnCitacao').classList.add('active');
+    document.getElementById('btnParafrase').classList.remove('active');
+    document.getElementById('fData').value = new Date().toISOString().slice(0,10);
+    document.getElementById('complementaresBody').classList.remove('open');
+    document.getElementById('toggleComplementares').classList.remove('open');
+  }
+
+  function openNewForm() {
+    editingId = null;
+    clearForm();
+    document.getElementById('formTitle').textContent = 'Novo fichamento';
+    document.getElementById('btnExcluir').style.display = 'none';
+    overlayForm.classList.add('show');
+    setTimeout(() => document.getElementById('fReferencia').focus(), 50);
+  }
+
+  function openEditForm(id) {
+    const f = fichas.find(x => x.id === id);
+    if (!f) return;
+    editingId = id;
+    clearForm();
+    document.getElementById('fReferencia').value = f.referencia || '';
+    document.getElementById('fAutor').value = f.autor || '';
+    document.getElementById('fPagina').value = f.pagina || '';
+    document.getElementById('fTitulo').value = f.titulo || '';
+    document.getElementById('fConteudo').value = f.conteudo || '';
+    document.getElementById('fComentario').value = f.comentario || '';
+    document.getElementById('fLocalizacao').value = f.localizacao || '';
+    document.getElementById('fTipoFonte').value = f.tipoFonte || '';
+    document.getElementById('fResumo').value = f.resumo || '';
+    document.getElementById('fPalavrasChave').value = f.palavrasChave || '';
+    document.getElementById('fRelacao').value = f.relacao || '';
+    document.getElementById('fRelevancia').value = f.relevancia || '';
+    document.getElementById('fCategoria').value = f.categoria || '';
+    document.getElementById('fData').value = f.dataFichamento || new Date().toISOString().slice(0,10);
+
+    tipoConteudo = f.tipoConteudo || 'citacao';
+    document.getElementById('btnCitacao').classList.toggle('active', tipoConteudo === 'citacao');
+    document.getElementById('btnParafrase').classList.toggle('active', tipoConteudo === 'parafrase');
+
+    const hasComplementares = f.localizacao || f.resumo || f.palavrasChave || f.relacao || f.relevancia || f.categoria || f.tipoFonte;
+    if (hasComplementares) {
+      document.getElementById('complementaresBody').classList.add('open');
+      document.getElementById('toggleComplementares').classList.add('open');
+    }
+
+    document.getElementById('formTitle').textContent = 'Editar fichamento';
+    document.getElementById('btnExcluir').style.display = 'inline-block';
+    overlayView.classList.remove('show');
+    overlayForm.classList.add('show');
+  }
+
+  function closeForm() {
+    overlayForm.classList.remove('show');
+    editingId = null;
+  }
+
+  document.getElementById('btnNovo').addEventListener('click', openNewForm);
+  document.getElementById('closeForm').addEventListener('click', closeForm);
+  document.getElementById('btnCancelar').addEventListener('click', closeForm);
+  // Clicar fora do painel de formulário NÃO fecha (evita perda de dados por clique acidental).
+  // Fechar só é possível pelo X, por "Cancelar", ou salvando.
+
+  document.getElementById('btnCitacao').addEventListener('click', () => {
+    tipoConteudo = 'citacao';
+    document.getElementById('btnCitacao').classList.add('active');
+    document.getElementById('btnParafrase').classList.remove('active');
+  });
+  document.getElementById('btnParafrase').addEventListener('click', () => {
+    tipoConteudo = 'parafrase';
+    document.getElementById('btnParafrase').classList.add('active');
+    document.getElementById('btnCitacao').classList.remove('active');
+  });
+
+  const toggleComp = document.getElementById('toggleComplementares');
+  toggleComp.addEventListener('click', () => {
+    toggleComp.classList.toggle('open');
+    document.getElementById('complementaresBody').classList.toggle('open');
+  });
+
+  // ---------- Salvar ----------
+  document.getElementById('btnSalvar').addEventListener('click', () => {
+    const referencia = document.getElementById('fReferencia').value.trim();
+    const conteudo = document.getElementById('fConteudo').value.trim();
+    const pagina = document.getElementById('fPagina').value.trim();
+    const comentario = document.getElementById('fComentario').value.trim();
+
+    if (!referencia || !conteudo || !pagina || !comentario) {
+      alert('Preencha o núcleo do fichamento: referência, página, conteúdo (citação ou paráfrase) e comentário próprio. Esses quatro campos são indispensáveis.');
+      return;
+    }
+
+    const data = {
+      referencia,
+      autor: document.getElementById('fAutor').value.trim(),
+      pagina,
+      titulo: document.getElementById('fTitulo').value.trim(),
+      conteudo,
+      tipoConteudo,
+      comentario,
+      localizacao: document.getElementById('fLocalizacao').value.trim(),
+      tipoFonte: document.getElementById('fTipoFonte').value,
+      resumo: document.getElementById('fResumo').value.trim(),
+      palavrasChave: document.getElementById('fPalavrasChave').value.trim(),
+      relacao: document.getElementById('fRelacao').value.trim(),
+      relevancia: document.getElementById('fRelevancia').value.trim(),
+      categoria: document.getElementById('fCategoria').value.trim(),
+      dataFichamento: document.getElementById('fData').value,
+    };
+
+    if (editingId) {
+      const idx = fichas.findIndex(f => f.id === editingId);
+      fichas[idx] = { ...fichas[idx], ...data };
+    } else {
+      fichas.push({ id: 'f' + Date.now(), criadoEm: Date.now(), ...data });
+    }
+
+    saveFichas();
+    updateCategoriaFilterOptions();
+    renderGrid();
+    closeForm();
+  });
+
+  const overlayConfirm = document.getElementById('overlayConfirm');
+  let pendingDeleteId = null;
+
+  document.getElementById('btnExcluir').addEventListener('click', () => {
+    if (!editingId) return;
+    pendingDeleteId = editingId;
+    overlayConfirm.classList.add('show');
+  });
+
+  document.getElementById('btnCancelarExclusao').addEventListener('click', () => {
+    pendingDeleteId = null;
+    overlayConfirm.classList.remove('show');
+  });
+
+  document.getElementById('btnConfirmarExclusao').addEventListener('click', () => {
+    if (!pendingDeleteId) return;
+    fichas = fichas.filter(f => f.id !== pendingDeleteId);
+    saveFichas();
+    updateCategoriaFilterOptions();
+    renderGrid();
+    overlayConfirm.classList.remove('show');
+    pendingDeleteId = null;
+    closeForm();
+  });
+
+  // ---------- Visualizar ficha ----------
+  function openView(id) {
+    const f = fichas.find(x => x.id === id);
+    if (!f) return;
+    viewingId = id;
+
+    document.getElementById('viewAutorTitulo').textContent = f.autor || 'Ficha';
+
+    let html = `<div class="view-ref">${escapeHtml(f.referencia)}
+      <div class="view-loc">
+        ${f.pagina ? 'Página: ' + escapeHtml(f.pagina) : ''}${f.localizacao ? ' · ' + escapeHtml(f.localizacao) : ''}
+        ${f.tipoFonte ? ' · Fonte ' + (f.tipoFonte === 'primaria' ? 'primária' : 'secundária') : ''}
+      </div>
+    </div>`;
+
+    html += `<div class="view-block">
+      <h4>${f.tipoConteudo === 'parafrase' ? 'Paráfrase' : 'Citação direta'}</h4>
+      <div class="conteudo ${f.tipoConteudo === 'citacao' ? 'citacao' : ''}">${escapeHtml(f.conteudo)}</div>
+    </div>`;
+
+    html += `<div class="view-block">
+      <h4>Comentário próprio</h4>
+      <div class="texto">${escapeHtml(f.comentario)}</div>
+    </div>`;
+
+    if (f.resumo) html += `<div class="view-block"><h4>Resumo do argumento</h4><div class="texto">${escapeHtml(f.resumo)}</div></div>`;
+
+    if (f.palavrasChave) {
+      const kws = f.palavrasChave.split(',').map(k => k.trim()).filter(Boolean);
+      html += `<div class="view-block"><h4>Palavras-chave</h4><div class="view-keywords">${kws.map(k => `<span class="pill">${escapeHtml(k)}</span>`).join('')}</div></div>`;
+    }
+
+    if (f.relacao) html += `<div class="view-block"><h4>Relação com outros autores/textos</h4><div class="texto">${escapeHtml(f.relacao)}</div></div>`;
+    if (f.relevancia) html += `<div class="view-block"><h4>Relevância para a pesquisa</h4><div class="texto">${escapeHtml(f.relevancia)}</div></div>`;
+
+    const metaBits = [];
+    if (f.categoria) metaBits.push('Categoria: ' + escapeHtml(f.categoria));
+    if (f.dataFichamento) metaBits.push('Fichado em: ' + formatDate(f.dataFichamento));
+    if (metaBits.length) html += `<div class="view-block"><h4>Organização</h4><div class="texto">${metaBits.join(' · ')}</div></div>`;
+
+    document.getElementById('viewBody').innerHTML = html;
+    overlayView.classList.add('show');
+  }
+
+  document.getElementById('closeView').addEventListener('click', () => overlayView.classList.remove('show'));
+  document.getElementById('btnFecharView').addEventListener('click', () => overlayView.classList.remove('show'));
+  overlayView.addEventListener('click', e => { if (e.target === overlayView) overlayView.classList.remove('show'); });
+  document.getElementById('btnEditar').addEventListener('click', () => openEditForm(viewingId));
+
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape') {
+      // O formulário não fecha com Esc, pelo mesmo motivo de não fechar ao clicar fora.
+      overlayView.classList.remove('show');
+    }
+  });
+
+  // ---------- Init ----------
+  initGoogleAuth();
+
+  // Tenta restaurar sessão se já havia token válido nesta aba
+  const savedToken = sessionStorage.getItem('gtoken');
+  if (savedToken) {
+    accessToken = savedToken;
+    onLoginSuccess().catch(() => {
+      // token expirado/inválido — volta para tela de login
+      sessionStorage.removeItem('gtoken');
+      accessToken = null;
+    });
+  }
+})();
+</script>
+</body>
+</html>
